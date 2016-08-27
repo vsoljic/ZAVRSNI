@@ -1,0 +1,81 @@
+@font-face {
+  font-family: 'font-icons';
+  src: url('../font/font-icons.eot?75006717');
+  src: url('../font/font-icons.eot?75006717#iefix') format('embedded-opentype'),
+       url('../font/font-icons.woff2?75006717') format('woff2'),
+       url('../font/font-icons.woff?75006717') format('woff'),
+       url('../font/font-icons.ttf?75006717') format('truetype'),
+       url('../font/font-icons.svg?75006717#font-icons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'font-icons';
+    src: url('../font/font-icons.svg?75006717#font-icons') format('svg');
+  }
+}
+*/
+ 
+ [class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "font-icons";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+ 
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+ 
+.icon-flight:before { content: '\e800'; } /* '' */
+.icon-right-open:before { content: '\e801'; } /* '' */
+.icon-right-open-1:before { content: '\e802'; } /* '' */
+.icon-right-big:before { content: '\e803'; } /* '' */
+.icon-info:before { content: '\e804'; } /* '' */
+.icon-flight-1:before { content: '\e805'; } /* '' */
+.icon-minus:before { content: '\e806'; } /* '' */
+.icon-minus-1:before { content: '\e807'; } /* '' */
+.icon-minus-2:before { content: '\e808'; } /* '' */
+.icon-right-small:before { content: '\e809'; } /* '' */
+.icon-gplus-circled:before { content: '\f059'; } /* '' */
+.icon-angle-double-right:before { content: '\f101'; } /* '' */
+.icon-youtube:before { content: '\f167'; } /* '' */
+.icon-right:before { content: '\f178'; } /* '' */
+.icon-cc-visa:before { content: '\f1f0'; } /* '' */
+.icon-cc-mastercard:before { content: '\f1f1'; } /* '' */
+.icon-cc-discover:before { content: '\f1f2'; } /* '' */
+.icon-cc-amex:before { content: '\f1f3'; } /* '' */
+.icon-cc-paypal:before { content: '\f1f4'; } /* '' */
+.icon-cc-stripe:before { content: '\f1f5'; } /* '' */
+.icon-twitter-circled:before { content: '\f30a'; } /* '' */
+.icon-facebook-circled:before { content: '\f30d'; } /* '' */
+.icon-instagram:before { content: '\f31e'; } /* '' */
+.icon-instagram-1:before { content: '\f32d'; } /* '' */

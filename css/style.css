@@ -1,0 +1,260 @@
+@import url(https://fonts.googleapis.com/css?family=Fauna+One|Muli);
+.header{
+  background-color: #243558;
+}
+
+label.error { 
+	float: none; 
+	margin-left: 5px;
+	display: inline-block;
+}​
+
+.second-nav-left ul, .second-nav-right ul, .main-nav ul{
+	list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.second-nav-right ul, .main-nav ul{
+	float:right;
+	padding:0;
+}
+
+.second-nav-left ul{
+	margin-left:20px;
+}
+.second-nav-left li, .second-nav-right li, .main-nav li{
+	float:left;
+}
+
+.second-nav-left li a, .second-nav-right li a, .main-nav li a, .logo a, .second-nav-right li p{
+	display:inline-block;
+	color:white;
+	font-size:1em;
+	padding: 14px 16px;
+    text-decoration: none;
+    cursor: pointer;
+
+}
+
+.second-nav-left a:hover, .second-nav-right a:hover, .second-nav-right li p:hover{
+	 background-color: #3F668F;
+}
+
+.header-2{
+	background-color: #243558;
+	color:white;
+	font-size:1.3em;
+}
+
+.main-nav ul {
+	padding-top: 30px;
+}
+
+
+.carousel-inner{
+	height:500px;
+}
+
+.formIndex{
+	background-color: #243558;
+	padding:45px;
+	margin-left:4%; 
+	float:left;
+	margin-top:-150px;
+}
+
+.formIndex input[type=text], .formIndex input[type=date], 
+	.formIndex input[type=submit]{
+	border: 1px solid #ccc;
+    box-sizing: border-box;
+    height:40px;
+    width:100%;
+    margin-right:20px;
+}
+
+.formIndex button{
+	cursor:pointer;
+	width:12%;
+	padding:9px;
+}
+
+.safeBuy{
+ background-color: #D4618F;
+ padding:30px;
+}
+
+.safeBuy div, .safeBuy h3{
+	display: inline-block;	
+	color: white;
+}
+
+.safeBuy h3 {
+	padding-left:15px;
+}
+
+.cheapFlightsNaslov{
+	padding-bottom:20px;
+}
+
+.cheapFlights .col-md-3 h4, .cheapFlights .col-md-4 h4{
+	padding:20px 0 40px 0;
+}
+
+.search{
+	padding:30px;
+	background-color: #243558;
+}
+
+.search input[type=search]{
+	border: 1px solid #ccc;
+    box-sizing: border-box;
+    height:40px;
+    width:100%;
+}
+
+.search input[type=submit]{
+	border: 1px solid #ccc;
+    box-sizing: border-box;
+    width:100px;
+    height:40px;
+}
+
+.payment {
+	background-color: #D5DADB;
+	margin-top:40px;
+}
+
+.privileges {
+	background-color: #A1D4FF;
+}
+
+
+
+/*************************CONTACT*************************/
+.contactUsNaslov{
+	background-color: #333;
+	color:white;
+	padding:15px;
+	margin-top:-99.5px;
+	width:50%;
+}
+
+/****************BOOKING******************************/
+
+.booking-nav{
+	list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.booking-nav li {
+	float: left;
+	text-decoration: none;
+}
+
+.booking-nav li a {
+	display:inline-block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.formBooking{
+	padding-top:80px;
+	margin-left:-30px;
+}
+
+.formBooking input[type=text]{
+	width:100%;
+}
+
+.buttonBooking {
+	padding-bottom:90px;
+}
+
+.chooseFlight h3{
+	padding-top:20px;
+	color:black;
+}
+
+.formBookingReturn{
+	padding: 30px 0 30px 0;
+	margin-left:-30px;
+}
+
+.not-active {
+   pointer-events: none;
+   cursor: default;
+   color: gray;
+}
+
+/**************BOOK-CHEAP-FLIGHT***************/
+.hero {
+	background-image: url("../img/zagrebPogled-big.jpg");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color:red;
+	background-size:cover;
+	height:500px;
+}
+
+.tableCheapFlight .table th {
+	padding: 20px 0 20px 0;
+}
+
+.iconsSocialMedia, .iconsSocialMedia a {
+	background-color:#A1D4FF;
+	color:#243558;
+	font-size: 44px;
+	padding:13px;
+}
+
+
+.privileges i {
+	color: black;
+	font-size: 45px;
+}
+
+.privileges h4 {
+	font-size: 22px;
+}
+
+/**************LOGIN**********************/
+.form{
+	background-color: #D5DADB;
+	border-radius: 20px;
+	padding: 20px;
+
+}
+
+.padding0 {
+	padding: 0 !important;
+}
+
+.imagesCity{
+	padding-top:20px;
+}
+
+/*.imagesCity img:first-child {
+	padding:0 !important;
+}*/
+
+
+/**************PASSENGER DETAIL***************/
+
+.formPassengerDetail .col-md-3, .formPassengerDetail .col-md-9 {
+	padding-bottom:10px;
+} 
+
+
+/**********PRIVILEGIJE****************/
+.privileges {
+	padding: 30px 0 30px 0;
+}
+
+/*************CONFIRMATION**************/
+.informationFlight{
+	background-color: #BBBEBF;
+	border-radius: 10px;
+}
+
