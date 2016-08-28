@@ -1,5 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php 
+	if(isset($_POST['optradio']))
+				{
+				    echo $_POST['optradio']." Username found in form <br />";
+				    // Set session variables
+				    $_SESSION["optradio"] = $_POST['optradio'];
+
+				    setCookie('radioButton', $_SESSION['optradio']);
+				    echo $_SESSION["optradio"]." stored in session <br />";
+				    echo 'Cookie set value: ' . $_['radioButton'];
+				    print_r($_COOKIE);
+				}
+				else {
+				    echo '<br>No, form submitted. Your old stored username was '.$_SESSION["optradio"];
+				};
+ ?>
   <head>
     <meta charset="utf-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -182,6 +198,8 @@
 				    echo '<br>No, form submitted. Your old stored returnFlight was '.$_SESSION["returnFlight"];
 				};
 
+				
+
 
 
 		 ?>
@@ -237,9 +255,9 @@
 							echo '<td style="display:none;">'. $flight->idFlight.'</td>'; #redak za ID pomoću kojeg će se izabrati let!!!!!#
 							echo '<td>' . $flight->depCity . ' (' . $flight->depTime . ') - ' . $flight->arrCity . ' (' . $flight->arrTime . ') ' . $flight->idFlight .' </td>';
 							echo '<td>' . $flight->priceEco . ' kn </td>';
-							echo '<td><input type="submit" name="classBtn" id="classBtn" value="Izaberi" onclick = "setCookie(&#39;chosenFlight&#39;,&#39;'.$flight->idFlight. ',' . $flight->priceEco.'&#39;, 1)" /></form></td>';
+							echo '<td><input type="submit" name="classBtn" id="classBtn" value="Izaberi" onclick = "setCookie(&#39;chosenFlight&#39;,&#39;'.$flight->idFlight. ',' . $flight->priceEco.'&#39;)" /></form></td>';
 							echo '<td>' . $flight->priceBus . ' kn </td>';
-							echo '<td><input type="submit" name="classBtn" id="classBtn" value="Izaberi" onclick = "setCookie(&#39;chosenFlight&#39;,&#39;'.$flight->idFlight . ',' . $flight->priceBus .'&#39;, 1)" /></form></td>';
+							echo '<td><input type="submit" name="classBtn" id="classBtn" value="Izaberi" onclick = "setCookie(&#39;chosenFlight&#39;,&#39;'.$flight->idFlight . ',' . $flight->priceBus .'&#39;)" /></form></td>';
 							echo '</tr>';
 					};
 						
@@ -284,7 +302,7 @@
 				</tbody>
 			</table>	
 		</div>	
-		<div class="col-md-12">
+		<!-- <div class="col-md-12">
 		<br><br>
 			<p> Izaberite koju klasu leta želite: </p>
 			<div class="radio">
@@ -297,11 +315,13 @@
 			    	<input type="radio" name="radioclass" value="business"/>Business
 			    </label>
 			</div>
-		</div>
+		</div> -->
 	</div>
 	
 	<br/><br/><br/><br/>
-	<div class="col-md-12 padding0">
+
+	 
+	<div class="col-md-12 padding0" id="returnHeading">
 		<h3>Popis svih letova iz <b><?php echo $_SESSION['arrivalCity'] ?></b> za <b><?php echo $_SESSION['departureCity'] ?></b> - <?php echo $_SESSION['returnFlight'] ?></h3>	
 		<br/><br/>				
 	</div>		
@@ -334,9 +354,9 @@
 							echo '<td style="display:none;">'. $flight->idFlight.'</td>'; #redak za ID pomoću kojeg će se izabrati let!!!!!#
 							echo '<td>' . $flight->depCity . ' (' . $flight->depTime . ') - ' . $flight->arrCity . ' (' . $flight->arrTime . ') ' . $flight->idFlight .' </td>';
 							echo '<td>' . $flight->priceEco . ' kn </td>';
-							echo '<td><input type="submit" name="classBtn" id="classBtn" value="Izaberi" onclick = "setCookie(&#39;chosenFlightReturn&#39;,&#39;'.$flight->idFlight. ',' . $flight->priceEco.'&#39;, 1)" /></form></td>';
+							echo '<td><input type="submit" name="classBtn" id="classBtn" value="Izaberi" onclick = "setCookie(&#39;chosenFlightReturn&#39;,&#39;'.$flight->idFlight. ',' . $flight->priceEco.'&#39;)" /></form></td>';
 							echo '<td>' . $flight->priceBus . ' kn </td>';
-							echo '<td><input type="submit" name="classBtn" id="classBtn" value="Izaberi" onclick = "setCookie(&#39;chosenFlightReturn&#39;,&#39;'.$flight->idFlight . ',' . $flight->priceBus .'&#39;, 1)" /></form></td>';
+							echo '<td><input type="submit" name="classBtn" id="classBtn" value="Izaberi" onclick = "setCookie(&#39;chosenFlightReturn&#39;,&#39;'.$flight->idFlight . ',' . $flight->priceBus .'&#39;)" /></form></td>';
 							echo '</tr>';
 					};
 
@@ -498,5 +518,21 @@
 
 
 </div>
+ <?php 
+		if($_COOKIE["radioButton"] == 'jednosmjerni'){ ?>
+		<script type="text/javascript">
+			document.getElementById("returnHeading").style.display = "none";
+			document.getElementById("chooseReturnFlightTable").style.display = "none";
+		</script>
+
+		<?php } else { ?>
+			<script type="text/javascript">
+			echo $_COOKIE["radioButton"];
+				document.getElementById("returnHeading").style.display = "block";
+				document.getElementById("chooseReturnFlightTable").style.display = "block";
+				
+			</script>
+		<?php } ?> 
+
 </body>
 </html>

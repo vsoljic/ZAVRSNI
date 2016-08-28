@@ -1,8 +1,8 @@
 $(document).ready(function() {
     $("#logindiv").hide();
-    
-    $('#departureCity, #arrivalCity, #outGoingFlight, #returnFlight').change(stepByStepEnableInputs); 
     stepByStepEnableInputs();
+    $('#departureCity, #arrivalCity, #outGoingFlight, #returnFlight').change(stepByStepEnableInputs); 
+    
    	$("#onclick").click(function() {
         $("#logindiv").css("display", "block");
     });

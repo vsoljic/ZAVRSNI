@@ -28,7 +28,7 @@
   </style>
   </head>
 
-<body onload="hideReturnFlight()"> 
+<body> 
 <?php
 		session_start();
        	require_once 'idiorm/idiorm.php';
@@ -107,8 +107,8 @@
 
 		<div class="row chooseFlight">
 		<div class="col-md-12">
-			<h3>Odaberite let:</h3>
-			<?php 
+			<h3>Odaberite let:</h3><br>
+			<!-- <?php 
 
 				if(isset($_POST['departureCity']))
 				{
@@ -154,25 +154,26 @@
 				    echo 'No, form submitted. Your old stored returnFlight was '.$_SESSION["returnFlight"];
 				};
 
-		     ?>
+		     ?> -->
 
 		</div>
 
-		<div class="col-md-3">
-		    <div class="radio">
-		      <label><input type="radio" name="optradio" value="jednosmjerni" required="true" checked="true"/>Jednosmjerni</label>
-		    </div>
-		    <div class="radio">
-		      <label><input type="radio" name="optradio" value="povratni"/>Povratni</label>
-		    </div>
-  	
-		</div>
+		
 	</div>
 
 	<div class="row formBooking">
-	<div class="col-md-12">
 	<form action="chooseFlight.php" method="post" role="form" class="form-inline">
-		
+	<div class="col-md-12">
+		<div class="form-group col-md-3">
+		    <input type="radio" name="optradio" value="jednosmjerni" required="true" />Jednosmjerni<br>
+			<input type="radio" name="optradio" value="povratni" checked="true" />Povratni
+			<br><br><br><br>
+		</div>
+
+	</div>
+
+	<div class="col-md-12">
+	
 		<div class="form-group col-md-3">
 			<label for ="departureCity">Departure city</label>
 			<select class="selectpicker" data-live-search="true" name="departureCity" id="departureCity" title="Departure City" data-header="Select a departure airport" id="departureCity">

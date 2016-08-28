@@ -160,7 +160,7 @@ label.error {
 }
 
 .formBooking{
-	padding-top:80px;
+	
 	margin-left:-30px;
 }
 
@@ -188,9 +188,9 @@ label.error {
    color: gray;
 }
 
+
 /**************BOOK-CHEAP-FLIGHT***************/
 .hero {
-	background-image: url("../img/zagrebPogled-big.jpg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-color:red;
@@ -258,3 +258,26 @@ label.error {
 	border-radius: 10px;
 }
 
+/************************ADMIN********************/
+
+.adminNav ul{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.adminNav li{
+	display: block;
+    width: 60px;
+    padding-bottom:10px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.adminNav a{
+	font-size:17px;
+}
+
+.adminNav a:hover{
+	 color: #A1D4FF;
+}

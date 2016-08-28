@@ -1,6 +1,8 @@
 $(document).ready(function(){
     var table = $('#chooseFlightTable').DataTable();
     var returnTable = $('#chooseReturnFlightTable').DataTable();
+
+    
  
     $('#chooseFlightTable tbody').on( 'click', 'tr', function () {
         if ( $(this).hasClass('selected') ) {
@@ -30,3 +32,5 @@ $(document).ready(function(){
    
 
 });
+
+ 

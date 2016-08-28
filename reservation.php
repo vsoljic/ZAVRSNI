@@ -252,13 +252,14 @@
 			<h4>CIJENA: <?php echo $chosenPrice .' kn ' ?></h4>
 		</div>
 
-		<div class="col-md-12">
+		<div class="col-md-12" id="returnHeading">
 		<br><br>
 			<h2>Datum povratka: </h2>		
 		</div>		
 
-		<div class="col-md-12">
+		<div class="col-md-12" id="returnData">
 			<?php 
+				if($_COOKIE["radioButton"] == 'povratni'){
 					$idFlight = substr($_COOKIE['chosenFlightReturn'], 0,1);
 					$price = substr($_COOKIE['chosenFlightReturn'], 2);
 					
@@ -287,7 +288,8 @@
 							
 						}
 					}
-				 ?>
+				}
+				?>
 
 				<h3><b><?php echo $depCity->city ?> - <?php echo $arrCity->city ?></b></h3>
 			<p><?php echo $chosenFlightReturn->departureTime . ' - ' . $chosenFlightReturn->arrivalTime ?></p>
@@ -297,7 +299,17 @@
 		
 		<div class="col-md-12">
 		<br>
-			<h2>UKUPNO: 770.00 kn </h2>
+			<h2>UKUPNO: <?php 
+			if($_COOKIE["radioButton"] == 'jednosmjerni'){ 
+				
+				$ukupno = $chosenPrice;
+				echo $ukupno . ' kn';
+			} else{
+				$ukupno = $chosenPrice + $chosenPriceReturn;
+				echo $ukupno . ' kn';
+			}
+
+			 ?> </h2>
 			<br>
 		</div>
 	
@@ -452,5 +464,20 @@
 
 
 </div>
+
+<?php 
+		if($_COOKIE["radioButton"] == 'jednosmjerni'){ ?>
+		<script type="text/javascript">
+			document.getElementById("returnHeading").style.display = "none";
+			document.getElementById("returnData").style.display = "none";
+		</script>
+
+		<?php } else { ?>
+			<script type="text/javascript">
+				document.getElementById("returnHeading").style.display = "block";
+				document.getElementById("returnData").style.display = "block";
+				
+			</script>
+		<?php } ?> 
 </body>
 </html>

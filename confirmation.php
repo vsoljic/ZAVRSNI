@@ -112,21 +112,20 @@
 		<div class="col-md-12">
 			<nav class="booking-nav">
 			<li><h3><a href="booking.php">Pretraga letova <i class="icon-minus"></i> <i class="icon-flight"></i><i class="icon-minus"></i></a></h3></li>
-			<li><h3><a href="chooseFlight.php" class="not-active">Odabir leta <i class="icon-minus"></i> <i class="icon-flight"></i><i class="icon-minus"></i></a></h3></li>
-			<li><h3><a href="personalDetails.php" class="not-active">Osobni podaci <i class="icon-minus"></i> <i class="icon-flight"></i><i class="icon-minus"></i></a></h3></li>
-			<li><h3><a href="reservation.php" class="not-active">Rezervacija <i class="icon-minus"></i> <i class="icon-flight"></i><i class="icon-minus"></i></a></h3></li>
-			<li><h3><a href="confirmation.php" class="not-active">Potvrda</a></h3></li>
+			<li><h3><a href="chooseFlight.php" >Odabir leta <i class="icon-minus"></i> <i class="icon-flight"></i><i class="icon-minus"></i></a></h3></li>
+			<li><h3><a href="personalDetails.php" >Osobni podaci <i class="icon-minus"></i> <i class="icon-flight"></i><i class="icon-minus"></i></a></h3></li>
+			<li><h3><a href="reservation.php" >Rezervacija <i class="icon-minus"></i> <i class="icon-flight"></i><i class="icon-minus"></i></a></h3></li>
+			<li><h3><a href="confirmation.php">Potvrda</a></h3></li>
 		</nav>	
 		</div>
 	</div>
 	<br/>
-	
-	<div class="row">
-		<div class="col-md-12">
-			<h1>Uspješno ste rezervirali kartu! <br>
-				<?php 
+
+	<?php 
 			if(isset($_SESSION['passengerName']) && isset($_SESSION['passengerLastName']) && isset($_SESSION['oib'])
-					&& isset($_SESSION['telNo']) && isset($_SESSION['email']) ){
+					&& isset($_SESSION['telNo']) && isset($_SESSION['email']) && isset($_POST['confirm']) && isset($_COOKIE['radioButton'])){
+
+			$sessionExpired = false;
 
 			$dt = date('Y-m-d H:i:s');
 			$passengerName = $_SESSION['passengerName'];
@@ -140,14 +139,17 @@
 
        		foreach($passengers as $passenger){
 
-       			if($passenger->oib == $_SESSION['oib']){
-       				echo 'Putnik već postoji!!!!';
+       			if($passenger->oib == $oib){
        				$postoji = true; 
-
-       			} 
+       				
+       			} else {
+       				echo 'Putnik ne postoji!';
+       			}
        		}
-
-       		if($postoji = false){
+      
+       		if($postoji == false){
+       			echo $passengerName;
+					
        			$passenger = ORM::for_table('passanger')->create();
 
 					$passenger->firstName = $passengerName;
@@ -156,8 +158,12 @@
 					$passenger->telNo = $telNo;
 					$passenger->email = $email;
 
-					$passenger->save();
+					echo $passengerLastName;
+					echo $oib;
+					echo $telNo;
+					echo $email;
 
+					$passenger->save();
 					echo 'Passenger saved';
        		}
 
@@ -169,36 +175,98 @@
 
 	     	$passengerId = $passenger->id;
 
-	       	$idFlight = substr($_COOKIE['chosenFlight'], 0,1);
-	       	$flight_seat = ORM::for_table('flight_seat')
-		       ->raw_query('SELECT * FROM flight_seat 
-		       	WHERE idFlight = :flightId', 
-		       	array('flightId' => $idFlight))
-		       ->find_one();
+	     	if($_COOKIE['radioButton'] == 'jednosmjerni'){
 
-       		$flightSeatId =  $flight_seat->id;
-       		# TREBA DODATI U BOOKING I FLIGHTRETURN #
-		
-			$booking = ORM::for_table('booking')->create();
-			$booking->idPassanger = $passengerId;
-			$booking->bookingDateTime = $dt;
+	     		echo $_COOKIE['radioButton'];
 
-			$reservationCode= generateRandomString();
-			$booking->bookingCode = $reservationCode;
-			$booking->idFlightSeat = $flightSeatId;
+		       	$idFlight = substr($_COOKIE['chosenFlight'], 0,1);
+		       	echo $idFlight;
 
-			$booking->save();
+		       	$flight_seat = ORM::for_table('flight_seat')
+			       ->raw_query('SELECT * FROM flight_seat 
+			       	WHERE idFlight = :flightId', 
+			       	array('flightId' => $idFlight))
+			       ->find_one();
 
-			echo 'BOOKING SAVED';
+	       		$flightSeatId =  $flight_seat->id;
+	       		echo $flightSeatId;
 			
-			$lastInsertId = $booking->id();
-					
+				$booking = ORM::for_table('booking')->create();
+				$booking->idPassanger = $passengerId;
+
+				$booking->bookingDateTime = $dt;
+				$reservationCode= generateRandomString();
+				$booking->bookingCode = $reservationCode;
+				$booking->idFlightSeat = $flightSeatId;
+
+				$booking->save();
+
+				echo 'BOOKING SAVED';
+				
+				$lastInsertId = $booking->id();
+			} else {
+
+				$idFlight = substr($_COOKIE['chosenFlight'], 0,1);
+		       	$flight_seat = ORM::for_table('flight_seat')
+			       ->raw_query('SELECT * FROM flight_seat 
+			       	WHERE idFlight = :flightId', 
+			       	array('flightId' => $idFlight))
+			       ->find_one();
+
+	       		$flightSeatId =  $flight_seat->id;
+	       					
+				$booking = ORM::for_table('booking')->create();
+				$booking->idPassanger = $passengerId;
+				$booking->bookingDateTime = $dt;
+
+				$reservationCode= generateRandomString();
+				$booking->bookingCode = $reservationCode;
+				$booking->idFlightSeat = $flightSeatId;
+
+				$booking->save();
+
+				echo 'BOOKING SAVED';
+				$lastInsertId = $booking->id();
+
+				###############################################################
+
+				$idFlightReturn = substr($_COOKIE['chosenFlightReturn'], 0,1);
+
+				$flight_seat_return = ORM::for_table('flight_seat')
+			       ->raw_query('SELECT * FROM flight_seat 
+			       	WHERE idFlight = :flightId', 
+			       	array('flightId' => $idFlightReturn))
+			       ->find_one();
+
+	       		$flightSeatIdReturn =  $flight_seat_return->id;
+	       				
+				$bookingReturn = ORM::for_table('booking')->create();
+				$bookingReturn->idPassanger = $passengerId;
+				$bookingReturn->bookingDateTime = $dt;
+
+				$reservationCode= generateRandomString();
+				$bookingReturn->bookingCode = $reservationCode;
+				$bookingReturn->idFlightSeat = $flightSeatIdReturn;
+
+				$bookingReturn->save();
+
+				echo 'BOOKING RETURN SAVED';
+				$lastInsertIdReturn = $bookingReturn->id();
+			}
+		} else {
+			echo '<h1>YOUR SESSION/COOKIE JUST EXPIRED. PLEASE RETURN TO THE MAIN PAGE</h1>';
+			$sessionExpired = true;
 		}
 
 	?>
 
 
-			</h1> <br>
+	
+	<div class="row" id="reservationDiv">
+		<div class="col-md-12">
+			
+	
+			<h1>Uspješno ste rezervirali kartu! <br></h1> <br>
 			<h4>Rezervaciju možete potvrditi na šalteru aerodroma minimalno dva sata prije leta sa sljedećim kodom:</h4>
 			<?php 
 				$bookingSaved = ORM::for_table('booking')
@@ -212,16 +280,15 @@
 		</div>		
 	</div>
 
-	<div class="row ">
+	<div class="row" id="reservationDivEx">
 		<div class="col-md-12 ">
 			<h3>Informacije o letu: 	
 			</h3>
 		</div>
 	</div>
 
-	<div class="row informationFlight">
-		<div class="col-md-12">
-		<?php 
+	<div class="row informationFlight" id="reservationDivEx1">
+	<?php 
 			$bookedFlight = ORM::for_table('booking')
 				->raw_query('SELECT * FROM booking 
 					JOIN flight_seat on booking.idFlightSeat = flight_seat.id
@@ -234,6 +301,7 @@
 				->find_one();
 
 		?>
+		<div class="col-md-12">
 		<br>
 			<h4>Datum polaska: </h4>		
 		</div>		
@@ -247,14 +315,27 @@
 
 
 		<!-- TREBA DODATI U BOOKING I FLIGHTRETURN -->
-		<div class="col-md-12">
+		<div class="col-md-12" id="returnConfirmation">
+		<?php 
+			$bookedFlightReturn = ORM::for_table('booking')
+				->raw_query('SELECT * FROM booking 
+					JOIN flight_seat on booking.idFlightSeat = flight_seat.id
+					JOIN flight on flight_seat.idFlight = flight.id
+				    JOIN seat on flight_seat.idSeat = seat.id
+				    JOIN flight_class on seat.idFlightClass = flight_class.id
+				    JOIN city as depCity on depCity.id = flight.idDepartureCity
+				    JOIN city as arrCity on arrCity.id = flight.idArrivalCity
+				    WHERE booking.id = :lastId', array('lastId' => $lastInsertIdReturn))
+				->find_one();
+
+		?>
 			<h4>Datum povratka: </h4>		
 		</div>		
 
-		<div class="col-md-12">
-			<h4><b><?php echo $bookedFlight->city . ' - ' . $bookedFlight->city  ?></b></h4>
-			<p><?php echo $bookedFlight->departureTime . ' - ' . $bookedFlight->arrivalTime  ?> </p>
-			<h4>Sjedalo: <b><?php echo $bookedFlight->seatNo ?></b> </h4>
+		<div class="col-md-12" id="returnConfirmation">
+			<h4><b><?php echo $bookedFlightReturn->city . ' - ' . $bookedFlightReturn->city  ?></b></h4>
+			<p><?php echo $bookedFlightReturn->departureTime . ' - ' . $bookedFlightReturn->arrivalTime  ?> </p>
+			<h4>Sjedalo: <b><?php echo $bookedFlightReturn->seatNo ?></b> </h4>
 			<br>
 		</div>
 	</div>
@@ -376,5 +457,33 @@
 
 
 </div>
+<?php 
+		if($_COOKIE["radioButton"] == 'jednosmjerni'){ ?>
+		<script type="text/javascript">
+			document.getElementById("returnConfirmation").style.display = "none";
+			
+		</script>
+
+		<?php } else { ?>
+			<script type="text/javascript">
+				document.getElementById("returnConfirmation").style.display = "block";
+			
+				
+			</script>
+		<?php } 
+
+		if($sessionExpired == true){?>
+		<script type="text/javascript">
+			document.getElementById("reservationDiv").style.display = "none";
+			document.getElementById("reservationDivEx").style.display = "none";
+			document.getElementById("reservationDivEx1").style.display = "none";
+			document.getElementById("returnConfirmation").style.display = "none";
+			
+		</script>
+		<?php }
+
+
+		?> 
+
 </body>
 </html>

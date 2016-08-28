@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
     <meta charset="utf-8"> 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script type="text/javascript" src="jquery-i18n/jquery.i18n.js"></script>
   	<script type="text/javascript" src="bower_components/moment/min/moment.min.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="datepicker/js/bootstrap-datepicker.js"></script>
@@ -31,15 +31,19 @@
 			    ORM::configure('password','root'); 
 			    ORM::configure('driver_options', array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
 
-			    $users = ORM::for_table('user')
-			    		->select('user.*')
-			    		->where( array('username' => 'admin', 'password' => 'admin' ))
-			    		->find_many();
-				foreach($users as $user){
-					$user->username = $_SESSION['username'];
-					$user->password = $_SESSION['password'];
-				};		
-				
+			    if(isset($_POST['username']) && isset($_POST['password'])){
+			    	$_SESSION['username'] = $_POST['username'];
+			    	$_SESSION['password'] = $_POST['password'];
+			    	$username= $_SESSION['username'];
+			    	$password = $_SESSION['password'];
+ 
+			    }
+
+			    $user = ORM::for_table('user')
+			    		->raw_query('SELECT * FROM user where username = :username AND password = :password',
+			    			array('username' => $username, 'password' => $password ))
+			    		->find_one();
+		
 				
 	?>
 
@@ -62,14 +66,14 @@
 	        	<ul>
 		          <form method="post" action="index.php">
 		        	<?php 
-								
-						if($_SESSION['username'] == $_POST['username'] && $_SESSION['password']==$_POST['password']){
-							echo '<li><p> Dobro došli, ' .$_SESSION["username"] . '</p></li>';	
+						
+
+						if($username == 'admin' && $password == 'admin'){
+							echo '<li><p> Dobro došli, ' .$username . '</p></li>';	
 						}
 						else{
 							//header("location:index.php");
-							echo $_POST['username'] . ' ' . $_POST['password'];
-							echo $_SESSION['username'] . ' ' . $_SESSION['password'];
+							echo '<li><p> Dobro došli, ' .$username . '</p></li>';
 						}
 				
 					?>
@@ -98,131 +102,233 @@
 	      	</nav>
 		</div> -->
 	</div>
-	
+
 	<div class="row">
-		<div class="col-md-12">
+
+	<div class="col-md-12">
 			<br>
 			<h2> Administracijska stranica "AVIOKOMPANIJE" </h2>
-			<br><br>
+			<br>
+		</div>
+
+	<div class="col-md-12 adminNav">
+		<nav>
+			<ul>
+				<li><a href="#cities">Gradovi</a></li>
+				<li><a href="#planes">Avioni</a></li>
+				<li><a href="#seats">Sjedala</a></li>
+				<li><a href="administrationFlights.php">Letovi</a></li>
+			</ul>
+		</nav>
+
+	</div>
+
+	</div>
+
+	<div class="row">
+		
+		<div class="col-md-12"><br><br>
+			<a name="cities"><h3>Popis gradova koji su u bazi:</h3></a> <br>
+			<h4>Promijenite grad:</h4>
+			<form action="administrationPost.php" method="POST" role="form" class="form-inline">
+			<select class="selectpicker step" data-live-search="true" title="Popis gradova" id="allCitiesForUpdate" name="allCitiesForUpdate">
+						<option value=""></option>
+						<?php 
+							$cities = ORM::for_table('city')->find_many();
+							foreach ($cities as $city) {
+								$state= $city->state;
+			    				echo '<option value=' . $city->id;
+			    				echo '>' . $city->city . ', ' .$state .'</option>';
+							}
+
+						?>
+			</select> 
+			<label for="updateCity">Naziv:</label>
+			<input type="text" name="updateCity" id="updateCity" class="form-control"/>
+			<label for="updateState">Država:</label>
+			<input type="text" name="updateState" id="updateState" class="form-control"/>
+			<input name="submitCityForUpdate" type="submit" value="Promijeni grad" class="btn btn-primary" />
+			</form>
 		</div>
 
 		<div class="col-md-12">
-			<form action="administration.php" role="form" class="form-inline">
+		<br>
+		<br>
+	
+			<form action="administrationPost.php" method="POST" role="form" class="form-inline">
 				<div class="form-group">
 					<h4>Unesite novi grad:</h4>
 					<label for="newCity">Grad:</label>
 					<input type="text" name="newCity" id="newCity" class="form-control"/>
 					<label for="newState">Država:</label>
 					<input type="text" name="newState" id="newState" class="form-control"/>
-					<input name="submit" type="submit" value="Dodaj grad" class="btn btn-primary" />
+					<input name="submitCity" type="submit" value="Dodaj grad" class="btn btn-primary" />
 				</div>
 			</form>
 		</div>
 
-				<br><br><br>
-			<div class="col-md-12">
-				<div class="form-group">
-				<form action="administration.php" role="form" class="form-inline">
-					<h4>Unesite novi avion:</h4>
-					<label for="newPlaneName">Ime aviona:</label>
-					<input type="text" name="newPlaneName" id="newPlaneName" class="form-control"/>
 
-					<label for="newPlaneRef">Broj aviona:</label>
-					<input type="text" name="newPlaneRef" id="newPlaneRef" class="form-control"/>
-					
-					<label for="newPlaneSeatsNo">Broj sjedala:</label>
-					<input type="number" name="newPlaneSeatsNo" id="newPlaneSeatsNo" class="form-control"/>
-
-					<input name="submit" type="submit" value="Dodaj avion" class="btn btn-primary" />
-					</form>
-				</div>
-			</div>
-
-			<div class="col-md-12">
-				<br><br><br>
-				<div class="form-group">
-					<form action="administration.php" role="form" class="form-inline">
-					<h4> Unesite novi let: </h4>
-					<label for="departureCityNew">Departure city: </label><br>
-					<input type="text" name="departureCity" id="departureCityNew" class="form-control" />
-
-					<br><label for="arrivaleCityNew">Arrival city: </label><br>
-					<input type="text" name="departureCity" id="arrivaleCityNew" class="form-control" />
-					
-					<br><label for="flightStartDate">Start date:</label><br>
-					<input type="text" id="flightStartDate" data-provide="datepicker" name="flightStartDate" placeholder="Datum početka leta" class="form-control step datapicker" >
-				
-					<br><label for="flightEndDate">End date:</label><br>
-					<input type="text" id="flightEndDate" data-provide="datepicker" name="flightEndDate" placeholder="Datum kraja leta" class="form-control step datapicker" >
-					<br><br>
-					<br><label for="everyNoDays">Svakih koliko dana:</label><br>
-					<input type="number" id="everyNoDays" name="everyNoDays" placeholder="npr. Svaka tri dana" class="form-control step" >
-
-					<br><label for="everyNoTimes">U danu, koliko puta:</label><br>
-					<input type="number" id="everyNoTimes" name="everyNoTimes" placeholder="npr. U danu, 3 puta" class="form-control step" >
-					<br><br>
-					
-					<br><label for="flightEveryHours">U koliko sati:</label><br>
-					<input type="time" id="flightEveryHours1" name="flightEveryHours1" placeholder="npr. Svaka tri dana" class="form-control step" >
-					<input type="time" id="flightEveryHours2" name="flightEveryHours2" placeholder="npr. Svaka tri dana" class="form-control step" >
-					<input type="time" id="flightEveryHours3" name="flightEveryHours3" placeholder="npr. Svaka tri dana" class="form-control step" >
-					<br><br>	
-					<input name="submit" type="submit" value="Dodaj" class="btn btn-primary" />
-					<br><br>
-					</form>
-				</div>	
-			</div>
-			
 		<div class="col-md-12">
-			<form action="administration.php" role="form" class="form-inline">
+		<div class="form-group"><br><br>
+			<h4> Izaberite grad koji želite izbrisati: </h4>
+			<form action="administrationPost.php" method="POST" role="form" class="form-inline">
+				<select class="selectpicker step" data-live-search="true" title="Popis gradova" data-header="Popis gradova iz baze" id="allCitiesForDelete" name="allCitiesForDelete">
+					<option value=""></option>
+							<?php 
+								$cities = ORM::for_table('city')->find_many();
+								foreach ($cities as $city) {
+									$state= $city->state;
+				    				echo '<option value=' . $city->id;
+				    				echo '>' . $city->city . ', ' .$state .'</option>';
+								}
+							?>
+				</select>
+				<input name="submitCityForDelete" type="submit" value="Izbriši grad" class="btn btn-primary" />
+			</form>
+		</div>	
+	</div>
+
+	</div>
+	<br><br><br><hr>
+	<div class="row">
+			<br>
+
+		<div class="col-md-12">
+			<a name="planes"><h3>Popis aviona koji su u bazi:</h3></a> <br>
+			<select class="selectpicker step" data-live-search="true" title="Popis aviona" id="listOfPlanes" name="listOfPlanes">
+						<option value=""></option>
+						<?php 
+							$planes = ORM::for_table('plane')->find_many();
+							foreach ($planes as $plane) {
+			    				echo '<option value=' . $plane->name;
+			    				echo '>' . $plane->name . ', ' .$plane->referenceNo .', br. sjedala = ' . $plane->seatsNo .'</option>';
+							}
+
+						?>
+			</select> 
+		</div>
+
+		<div class="col-md-12">
+			<div class="form-group"> <br><br>
+			<form action="administrationPost.php" method="POST" role="form" class="form-inline">
+				<h4>Unesite novi avion:</h4>
+				<label for="newPlaneName">Ime aviona:</label>
+				<input type="text" name="newPlaneName" id="newPlaneName" class="form-control"/>
+
+				<label for="newPlaneRef">Broj aviona:</label>
+				<input type="text" name="newPlaneRef" id="newPlaneRef" class="form-control"/>
+				
+				<label for="newPlaneSeatsNo">Broj sjedala:</label>
+				<input type="number" name="newPlaneSeatsNo" id="newPlaneSeatsNo" class="form-control"/>
+
+				<input name="submitPlane" type="submit" value="Dodaj avion" class="btn btn-primary" />
+				</form>
+			</div>
+		</div>
+
+
+		<div class="col-md-12">
+			<div class="form-group"> <br><br>
+				<h4> Izaberite avion koji želite izbrisati: </h4>
+				<form  action="administrationPost.php" method="POST" role="form" class="form-inline">
+				<select class="selectpicker step" data-live-search="true" title="Popis aviona" data-header="Popis aviona iz baze" id="allPlanesForDelete" name="allPlanesForDelete">
+					<option value=""></option>
+						<?php 
+							$planes = ORM::for_table('plane')->find_many();
+							foreach ($planes as $plane) {
+			    				echo '<option value=' . $plane->id;
+			    				echo '>' . $plane->name . ', ' .$plane->referenceNo .', br. sjedala = ' . $plane->seatsNo .'</option>';
+							}
+						?>
+				</select>
+
+				<input name="submitPlaneForDelete" type="submit" value="Izbriši avion" class="btn btn-primary" />
+				</form>
+			</div>	
+			
+									
+		</div>
+
+
+	</div>
+
+<br><br><hr>
+	<div class="row">
+		<div class="col-md-12">
+			<a name="seats"><h3>Popis sjedala koja su u bazi:</h3> </a><br>
+			<select class="selectpicker step" data-live-search="true" title="Popis sjedala" id="listOfSeats" name="listOfSeats">
+						<option value=""></option>
+						<?php 
+							$seats = ORM::for_table('seat')
+							->select_many(array('seatNo' => 'seat.seatNo', 'class' => 'flight_class.className', 
+								'id' => 'seat.id'))
+							->join('flight_class', array('seat.idFlightClass', '=', 'flight_class.id'))
+							->find_many();
+
+							foreach ($seats as $seat) {
+			    				echo '<option value=' . $seat->id;
+			    				echo '>' . $seat->seatNo . ', ' .$seat->class .'</option>';
+							}
+
+						?>
+			</select> 
+		</div>
+		<div class="col-md-12"> <br><br>
+			<form action="administrationPost.php" method="POST" role="form" class="form-inline">
 				<div class="form-group">
 					<h4>Dodajte novo sjedalo:</h4>
 					<label for="newSeat">Broj sjedala:</label>
 					<input type="text" name="newSeat" id="newSeat" class="form-control" placeholder="U obliku 'brojSlovo'= 1A" />
-					<input name="submit" type="submit" value="Dodaj sjedalo" class="btn btn-primary" />
+					<label for="newSeatClass">Klasa sjedala:</label>
+					<input type="number" name="newSeatClass" id="newSeatClass" class="form-control" placeholder="1 ili 2" />
+					<input name="submitSeat" type="submit" value="Dodaj sjedalo" class="btn btn-primary" />
 				</div>
 			</form>
 		</div>
 
-			<div class="col-md-12">
-				<div class="form-group"><br><br>
-					<h4> Izaberite grad koji želite izbrisati: </h4>
-					<select class="selectpicker step" data-live-search="true" title="Popis gradova" data-header="Popis gradova iz baze" id="allCities">
+		<div class="col-md-12">
+			<div class="form-group"> <br><br>
+				<h4> Izaberite sjedalo koji želite izbrisati: </h4>
+				<form  action="administrationPost.php" method="POST" role="form" class="form-inline">
+					<select class="selectpicker step" data-live-search="true" title="Popis sjedala" data-header="Popis sjedala iz baze" id="allSeatsForDelete" name="allSeatsForDelete">
 						<option value=""></option>
-						<option value="zagreb">Zagreb</option>
-						<option value="split">Split</option>
-						<option value="rijeka">Rijeka</option>
-						<option value="berlin">Berlin</option>
-					  	<option value="london">London</option>
-						<option value="paris">Paris</option>
-					</select>
+							<?php 
+							$seats = ORM::for_table('seat')
+							->select_many(array('seatNo' => 'seat.seatNo', 'class' => 'flight_class.className', 
+								'id' => 'seat.id'))
+							->join('flight_class', array('seat.idFlightClass', '=', 'flight_class.id'))
+							->find_many();
 
-					<input name="submit" type="submit" value="Izbriši iz baze" class="btn btn-primary" />
+							foreach ($seats as $seat) {
+			    				echo '<option value=' . $seat->id;
+			    				echo '>' . $seat->seatNo . ', ' .$seat->class .'</option>';
+							}
+							?>
+					</select>
+					<input name="submitSeatForDelete" type="submit" value="Izbriši sjedalo" class="btn btn-primary" />
+
+				</form>
+			</div>	
+
+		</div>
+
+	</div>
+
+	<div class="row">
+
 	
-				</div>	
-			</div>
+	</div>
+
 				<br><br>
 			
-			<div class="col-md-12">
-				<div class="form-group">
-					<h4> Izaberite avion koji želite izbrisati: </h4>
-					<select class="selectpicker step" data-live-search="true" title="Popis aviona" data-header="Popis aviona iz baze" id="allPlanes">
-						<option value=""></option>
-						<option value="zagreb">Croatia Airlines XKG03</option>
-						<option value="split">German Wings</option>
-						<option value="rijeka">Austrian Airlines</option>
-						<option value="berlin">Lufthansa</option>
-					  	<option value="london">Croatia Airlines GPA42</option>
-					</select>
+	<div class="row">
+		
 
-					<input name="submit" type="submit" value="Izbriši iz baze" class="btn btn-primary" />
-				</div>	
-				<br><br>
-							
-			</form>
-			</div>
+	</div>
 
-			<div class="col-md-12">
+	<div class="row">
+
+			<!-- <div class="col-md-12">
 				<div class="form-group"><br><br>
 					<h4> Izaberite let koji želite izbrisati: </h4>
 					<select class="selectpicker step" data-live-search="true" title="Popis letova" data-header="Popis letova iz baze" id="allFlights">
@@ -235,10 +341,11 @@
 					<input name="submit" type="submit" value="Izbriši iz baze" class="btn btn-primary" />
 	
 				</div>	
-			</div>
-			
+			</div> -->
+	
+	</div>	
 
-	</div>
+
 
 	<div class="row safeBuy">
 		<div class="col-md-12">

@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
-    <script type="text/javascript" src="jquery-i18n/jquery.i18n.js"></script>
   	<script type="text/javascript" src="bower_components/moment/min/moment.min.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
  
@@ -23,7 +22,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css">
 	
 	<link rel="stylesheet" href="fonts/css/font-icons.css"/>
-   <script src="js/javascript.js"></script>
+    <script src="js/javascript.js"></script>
     <script src="js/dateRange.js"></script>
     <link href="css/style.css" rel="stylesheet">
     <style>
@@ -196,7 +195,7 @@
 						<option value="paris">Paris</option> -->
 					</select>
 				</div>	
-				<div class="form-group" >
+				<div class="form-group">
 					<input type="text" id="outGoingFlight"  name="outGoingFlight" placeholder="Outgoing flight Date" class="form-control step datapicker" disabled>
 					<!--  <div class="input-group-addon">
 			        	<span class="glyphicon glyphicon-th"></span>
@@ -237,15 +236,15 @@
 			<a href="bookCheapFlight.html"> <img src="img/paris370x300.jpg"> -->
 			<?php 		
 					$cities = ORM::for_table('city')
-						->select_many(array('path' => 'pictures.img370x300', 'city' => 'city.city'))
+						->select_many(array('path' => 'pictures.img370x300', 'city' => 'city.city', 'id' => 'city.id'))
 						->join('pictures', array('city.id', '=', 'pictures.idCity'))
 						->limit(9)
 						->find_many();		
 
-
+			 
 					foreach ($cities as $city) {
 						echo '<div class="col-md-4">';
-						echo '<a href="bookCheapFlight.html">';
+						echo '<a href="bookCheapFlight.php?id='. $city->id . '">';
 
 	    				echo '<img src="'. $city->path .'">';
 	    				echo '<h4>'. $city->city .'<i class="icon-right-open-1"></i> </a></h4>';
